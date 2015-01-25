@@ -19,6 +19,8 @@
 	#include "Typedef.h"
 #endif
 
+
+
 using namespace std;
 
 #include <string>
@@ -28,6 +30,13 @@ using namespace std;
 #include <cctype>
 #include <locale>
 
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
 
 string int2HexStr(int n);
 
@@ -74,5 +83,19 @@ inline int hexStr2int(string s)
 	return x;
 }
 
+template <typename T>
+inline T roundDown(T number, T round)
+{
+	return (number / round) * round;
+}
+
+template <typename T>
+inline T roundUp(T number, T round)
+{
+	if(number % round)
+		number = (number / round) * round + round;
+
+	return number;
+}
 
 #endif

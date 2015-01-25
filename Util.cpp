@@ -7,13 +7,13 @@
  *
  * This file has some utiliti functions
  */
- 
-#include "Util.h"
+
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+#include "Util.h"
 
 using namespace std;
 
@@ -113,3 +113,4 @@ string removeSpaces(string s)
 		if(!isspace(s[i]))	s2.append(1, s[i]);
 	return s2;
 }
+
