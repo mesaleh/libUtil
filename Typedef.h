@@ -1,3 +1,13 @@
+/*
+ * Typedef.h
+ *
+ *  Created on: September 5, 2014
+ *  Author: Moustafa
+ *  Version: 1.0
+ *
+ * File that defines some Win-specific constants.
+ */
+ 
 #ifndef __linux__
 	#include <windows.h>
 #else
