@@ -10,9 +10,15 @@
 
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+#ifdef __linux__
+#include <sys/stat.h>
+#else
+#include "Shlwapi.h"
+#endif
 #include "Util.h"
 
 using namespace std;
@@ -106,6 +112,7 @@ string getLineFromMem(LPVOID &ReadAddr, LPVOID Bound)
 	return "";
 }
 
+/* remove spaces in between characters */
 string removeSpaces(string s)
 {
 	string s2;
@@ -114,3 +121,54 @@ string removeSpaces(string s)
 	return s2;
 }
 
+#ifdef __linux__
+
+bool isFile(char* path) {
+    struct stat buf;
+    stat(path, &buf);
+    return S_ISREG(buf.st_mode);
+}
+
+bool isDir(char* path) {
+    struct stat buf;
+    stat(path, &buf);
+    return S_ISDIR(buf.st_mode);
+}
+
+inline bool isFileExists(char* file) {
+  struct stat buffer;   
+  return (stat (file, &buffer) == 0); 
+}
+#else
+
+bool isFile(char* path) {
+	wchar_t* wstr = new wchar_t[strlen(path)+1];
+    std::mbstowcs(wstr, path, strlen(path));
+	wstr[strlen(path)] = NULL;
+	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
+	delete wstr;
+	return !(res & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+bool isDir(char* path) {	
+	wchar_t* wstr = new wchar_t[strlen(path)+1];
+    std::mbstowcs(wstr, path, strlen(path));
+	wstr[strlen(path)] = NULL;
+	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
+	delete wstr;
+	return (res & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+// Checks if file exists. This is a faster implementation than fstream way of C++
+bool isFileExists(char* path)
+{
+	wchar_t* wstr = new wchar_t[strlen(path)+1];
+    std::mbstowcs(wstr, path, strlen(path));
+	wstr[strlen(path)] = NULL;
+	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
+	delete wstr;
+	return (res != INVALID_FILE_ATTRIBUTES && !(res & FILE_ATTRIBUTE_DIRECTORY));
+}
+
+
+#endif
