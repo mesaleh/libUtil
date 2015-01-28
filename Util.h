@@ -98,6 +98,10 @@ inline T roundUp(T number, T round)
 	return number;
 }
 
+#ifdef __linux__
+int increaseStackSize(unsigned int Size);
+#endif
+
 bool isFile(char* path);
 bool isDir(char* path);
 bool isFileExists(char* name);
