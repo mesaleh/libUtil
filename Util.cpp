@@ -23,6 +23,23 @@
 
 using namespace std;
 
+
+// private functions
+DWORD _getFileAttributes(char* path)
+{
+	wchar_t* wstr = new wchar_t[strlen(path)+1];
+    int len = std::mbstowcs(wstr, path, MAX_PATH);
+	DWORD res = INVALID_FILE_ATTRIBUTES;
+	if(len > 0)	{
+		wstr[len] = NULL;
+		res = GetFileAttributesW((LPCWSTR)wstr);
+	}
+	delete[] wstr;
+	return res;
+}
+
+// public functions
+
 string int2HexStr(int n)
 {
 	std::stringstream ss;
@@ -162,32 +179,20 @@ int increaseStackSize(unsigned int Size)
 }
 #else
 
-bool isFile(char* path) {
-	wchar_t* wstr = new wchar_t[strlen(path)+1];
-    std::mbstowcs(wstr, path, strlen(path));
-	wstr[strlen(path)] = NULL;
-	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
-	delete[] wstr;
+inline bool isFile(char* path) {
+	DWORD res = _getFileAttributes(path);
 	return !(res & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-bool isDir(char* path) {	
-	wchar_t* wstr = new wchar_t[strlen(path)+1];
-    std::mbstowcs(wstr, path, strlen(path));
-	wstr[strlen(path)] = NULL;
-	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
-	delete[] wstr;
+inline bool isDir(char* path) {	
+	DWORD res = _getFileAttributes(path);
 	return (res & FILE_ATTRIBUTE_DIRECTORY);
 }
 
 // Checks if file exists. This is a faster implementation than fstream way of C++
-bool isFileExists(char* path)
+inline bool isFileExists(char* path)
 {
-	wchar_t* wstr = new wchar_t[strlen(path)+1];
-    std::mbstowcs(wstr, path, strlen(path));
-	wstr[strlen(path)] = NULL;
-	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
-	delete[] wstr;
+	DWORD res = _getFileAttributes(path);
 	return (res != INVALID_FILE_ATTRIBUTES && !(res & FILE_ATTRIBUTE_DIRECTORY));
 }
 
