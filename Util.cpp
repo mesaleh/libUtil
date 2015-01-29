@@ -5,7 +5,7 @@
  *  Author: Moustafa
  *  Version: 1.0
  *
- * This file has some utiliti functions
+ * This file has some utility functions
  */
 
 #include <string>
@@ -16,8 +16,6 @@
 #include <stdio.h>
 #ifdef __linux__
 #include <sys/stat.h>
-#else
-#include "Shlwapi.h"
 #endif
 #include "Util.h"
 
@@ -152,7 +150,7 @@ bool isDir(char* path) {
     return S_ISDIR(buf.st_mode);
 }
 
-inline bool isFileExists(char* file) {
+bool isFileExists(char* file) {
   struct stat buffer;   
   return (stat (file, &buffer) == 0); 
 }
@@ -179,18 +177,18 @@ int increaseStackSize(unsigned int Size)
 }
 #else
 
-inline bool isFile(char* path) {
+bool isFile(char* path) {
 	DWORD res = _getFileAttributes(path);
 	return !(res & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-inline bool isDir(char* path) {	
+bool isDir(char* path) {	
 	DWORD res = _getFileAttributes(path);
 	return (res & FILE_ATTRIBUTE_DIRECTORY);
 }
 
 // Checks if file exists. This is a faster implementation than fstream way of C++
-inline bool isFileExists(char* path)
+bool isFileExists(char* path)
 {
 	DWORD res = _getFileAttributes(path);
 	return (res != INVALID_FILE_ATTRIBUTES && !(res & FILE_ATTRIBUTE_DIRECTORY));

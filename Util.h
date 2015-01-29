@@ -38,6 +38,9 @@ using namespace std;
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+// private functions
+DWORD _getFileAttributes(char* path);
+
 string int2HexStr(int n);
 
 string getFileName(string path);
