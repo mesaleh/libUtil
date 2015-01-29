@@ -105,7 +105,7 @@ string getLineFromMem(LPVOID &ReadAddr, LPVOID Bound)
 		memcpy(Line, (LPVOID)((DWORD)ReadAddr - 1 - StrLen), StrLen);
 		Line[StrLen] = '\0';
 		string s = string(Line);
-		delete Line;
+		delete[] Line;
 		return s;
 	}
 	
@@ -167,7 +167,7 @@ bool isFile(char* path) {
     std::mbstowcs(wstr, path, strlen(path));
 	wstr[strlen(path)] = NULL;
 	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
-	delete wstr;
+	delete[] wstr;
 	return !(res & FILE_ATTRIBUTE_DIRECTORY);
 }
 
@@ -176,7 +176,7 @@ bool isDir(char* path) {
     std::mbstowcs(wstr, path, strlen(path));
 	wstr[strlen(path)] = NULL;
 	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
-	delete wstr;
+	delete[] wstr;
 	return (res & FILE_ATTRIBUTE_DIRECTORY);
 }
 
@@ -187,7 +187,7 @@ bool isFileExists(char* path)
     std::mbstowcs(wstr, path, strlen(path));
 	wstr[strlen(path)] = NULL;
 	DWORD res = GetFileAttributesW((LPCWSTR)wstr);
-	delete wstr;
+	delete[] wstr;
 	return (res != INVALID_FILE_ATTRIBUTES && !(res & FILE_ATTRIBUTE_DIRECTORY));
 }
 
