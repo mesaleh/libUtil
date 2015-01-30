@@ -16,6 +16,7 @@
 #include <stdio.h>
 #ifdef __linux__
 #include <sys/stat.h>
+#include <sys/resource.h>
 #endif
 #include "Util.h"
 
@@ -23,6 +24,7 @@ using namespace std;
 
 
 // private functions
+#ifndef __linux__
 DWORD _getFileAttributes(char* path)
 {
 	wchar_t* wstr = new wchar_t[strlen(path)+1];
@@ -35,6 +37,7 @@ DWORD _getFileAttributes(char* path)
 	delete[] wstr;
 	return res;
 }
+#endif
 
 // public functions
 
