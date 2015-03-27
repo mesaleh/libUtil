@@ -8,6 +8,7 @@
  * This file has some utility functions
  */
 
+#include <regex>
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -128,6 +129,24 @@ string getLineFromMem(LPVOID &ReadAddr, LPVOID Bound)
 	}
 	
 	return "";
+}
+
+/*
+* The functions escape the following:
+- it adds a single backslash to an odd number of backslashes.
+- removes non-printable characters. (should we remove or replace it by another one for unescape())
+- replace " with \"
+*/
+string escapeForJson(string s)
+{
+	// The order of replacement is important!
+	std::regex e2("(^|[^\\\\])(\\\\(\\\\\\\\)*)(?!\\\\)");		// if a sequence of backslashes was of odd length, add a backslashes to make it even
+	std::regex e3("[^[:print:]]");								// remove all non-printable character, equivalent to str.encoding('ascii', 'ignore') in python
+	std::regex e4("\\\"");										// replace a double quote with a backslash double quote
+	s = std::regex_replace(s, e2, "$1$2\\");
+	s = std::regex_replace(s, e3, "");
+	s = std::regex_replace(s, e4, "\\\"");
+	return s;
 }
 
 /* remove spaces in between characters */
