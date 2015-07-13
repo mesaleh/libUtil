@@ -215,6 +215,18 @@ bool isFileExists(char* path)
 	DWORD res = _getFileAttributes(path);
 	return (res != INVALID_FILE_ATTRIBUTES && !(res & FILE_ATTRIBUTE_DIRECTORY));
 }
-
-
 #endif
+
+bool isValidPath(string x)
+{
+
+	// file name cannot contain any of < > : " / \ | ? *, to match them use std::regex r1("[<>:\"/\\\\\\|\\*\\?]");
+	// However, the path can have :, ?, \, / as in c:\, or \\?\.
+	std::regex r1("[<>\"\\|\\*]");				// does the string contain any of < > " | *
+	std::regex r2("[^[:print:]]");				// does it contain non-printable chars
+	std::regex r3("(.*[ ]+)");					// ends with a space(s)
+
+	return !(std::regex_search(x, r1) || std::regex_search(x, r2) || std::regex_match(x, r3));
+
+	// more checks to be added
+}

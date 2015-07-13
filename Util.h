@@ -119,5 +119,6 @@ int increaseStackSize(unsigned int Size);
 bool isFile(char* path);
 bool isDir(char* path);
 bool isFileExists(char* name);
-
 #endif
+
+bool isValidPath(string);
