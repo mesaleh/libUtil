@@ -33,6 +33,7 @@ public:
 	bool isValidPath(string path);
     bool checkArgs(int argc, char* argv[], char* arg);
     int getFileArgs(int argc, char* argv[]);
+	//bool parseArgs(int argc, char* argv[]);
 };
 
 

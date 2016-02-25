@@ -206,7 +206,7 @@ bool isFile(char* path) {
 
 bool isDir(char* path) {	
 	DWORD res = _getFileAttributes(path);
-	return (res & FILE_ATTRIBUTE_DIRECTORY);
+	return ( (res != INVALID_FILE_ATTRIBUTES) && (res & FILE_ATTRIBUTE_DIRECTORY) );
 }
 
 // Checks if file exists. This is a faster implementation than fstream way of C++
@@ -229,4 +229,44 @@ bool isValidPath(string x)
 	return !(std::regex_search(x, r1) || std::regex_search(x, r2) || std::regex_match(x, r3));
 
 	// more checks to be added
+}
+
+int LevenshteinDistance(string s, string t)
+{
+	// degenerate cases
+	if (s == t) return 0;
+	if (s.length() == 0) return t.length();
+	if (t.length() == 0) return s.length();
+
+	// create two work vectors of integer distances
+	int* v0 = new int[t.length() + 1];
+	int* v1 = new int[t.length() + 1];
+
+	// initialize v0 (the previous row of distances)
+	// this row is A[0][i]: edit distance for an empty s
+	// the distance is just the number of characters to delete from t
+	for (int i = 0; i < t.length() + 1; i++)
+		v0[i] = i;
+
+	for (int i = 0; i < s.length(); i++)
+	{
+		// calculate v1 (current row distances) from the previous row v0
+
+		// first element of v1 is A[i+1][0]
+		//   edit distance is delete (i+1) chars from s to match empty t
+		v1[0] = i + 1;
+
+		// use formula to fill in the rest of the row
+		for (int j = 0; j < t.length(); j++)
+		{
+			int cost = (s[i] == t[j]) ? 0 : 1;
+			v1[j + 1] = min(min(v1[j] + 1, v0[j + 1] + 1), v0[j] + cost);
+		}
+
+		// copy v1 (current row) to v0 (previous row) for next iteration
+		for (int j = 0; j < t.length() + 1; j++)
+			v0[j] = v1[j];
+	}
+
+	return v1[t.length()];
 }
