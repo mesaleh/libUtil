@@ -29,6 +29,7 @@ using namespace std;
 #include <functional> 
 #include <cctype>
 #include <locale>
+#include <vector>
 
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
@@ -80,8 +81,9 @@ static inline std::string ReplaceAll(std::string str, const std::string& from, c
 template <typename T>
 string numToStr(T number)
 {
-	string s = dynamic_cast<stringstream *> (&(stringstream() << std::uppercase << number))->str();
-	return (s);
+	//string s = dynamic_cast<stringstream *> (&(stringstream() << std::uppercase << number))->str();
+	//return (s);
+	return to_string(number);
 }
 
 string removeSpaces(string s);
@@ -122,3 +124,7 @@ bool isFileExists(char* name);
 #endif
 
 bool isValidPath(string);
+
+int LevenshteinDistance(string s, string t);
+
+
